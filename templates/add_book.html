@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h1>Add New Book</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="name">Title:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" required></textarea><br><br>
+
+        <label for="selectedSectionId">Section:</label>
+        <select id="selectedSectionId" name="selectedSectionId">
+            {% for album in albums %}
+                <option value="{{ album.id }}">{{ album.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="selectedAuthorId">Artist:</label>
+        <select id="selectedAuthorId" name="selectedAuthorId">
+            {% for author in authors %}
+                <option value="{{ author.id }}">{{ author.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="selectedLanguageId">Language:</label>
+        <select id="selectedLanguageId" name="selectedLanguageId">
+            {% for language in languages %}
+                <option value="{{ language.id }}">{{ language.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" required><br><br>
+        <button type="submit">Add Book</button>
+    </form>
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <h1>Author</h1>
+        <ul>
+            {% for author in authors %}
+                <li>{{ author.name }} <a href="/delete_Author/{{ author.id }}">Delete</a></li>
+            {% endfor %}
+        </ul>
+        <input type="text" id="newArtistName" placeholder="Enter Author name">
+        <button onclick="addArtist()">Add Author</button>
+    </div>
+    <div class="col-md-4">
+        <h1>Languages</h1>
+        <ul>
+            {% for language in languages %}
+                <li>{{ language.name }} <a href="/delete_language/{{ language.id }}">Delete</a></li>
+            {% endfor %}
+        </ul>
+        <input type="text" id="newLanguageName" placeholder="Enter language">
+        <button onclick="addLanguage()">Add Language</button>
+    </div>
+</div>
+
+<script>
+    function addArtist() {
+        const newArtistName = document.getElementById('newArtistName').value;
+        fetch('/create_Author', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication-Token': localStorage.getItem('auth-token')
+            },
+            body: JSON.stringify({ name: newArtistName })
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                throw new Error('Failed to add artist');
+            }
+        }).catch(error => {
+            console.error(error);
+        });
+    }
+
+    function addLanguage() {
+        const newLanguageName = document.getElementById('newLanguageName').value;
+        fetch('/create_language', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication-Token': localStorage.getItem('auth-token')
+            },
+            body: JSON.stringify({ name: newLanguageName })
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                throw new Error('Failed to add language');
+            }
+        }).catch(error => {
+            console.error(error);
+        });
+    }
+</script>
+{% endblock %}

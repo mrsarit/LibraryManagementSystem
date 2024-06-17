@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Recharge Request</h2>
+<label for="wallet">Current Balance: {{money}}</label>
+<form action="/request_recharge" method="POST">
+    <label for="amount">Enter recharge amount:</label>
+    <input type="number" name="amount" id="amount" required>
+    <button type="submit">Request Recharge</button>
+</form>
+
+{% endblock %}

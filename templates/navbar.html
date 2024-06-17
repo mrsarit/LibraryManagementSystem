@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">e-Library</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          
+          {% if current_user.is_authenticated %}
+          {% if 'user' in current_user.get_user_roles() %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('request_recharge') }}">Wallet</a>
+            </li>
+            {% endif %}
+            {% if 'admin' in current_user.get_user_roles() %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('all_issues') }}">Book Issued</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('recharge_requests') }}">Recharge Requests</a>
+              </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('all_books') }}">All Books</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('albums') }}">All Sections</a>
+            </li>
+            {% if 'user' in current_user.get_user_roles() %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('user_collection') }}">My Collection</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('search_books') }}">Search</a>
+            </li>
+            {% if 'admin' in current_user.get_user_roles() %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('add_new_Book') }}">Add New Book</a>
+              </li>
+            {% endif %}
+            {% if 'admin' in current_user.get_user_roles() %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin_users') }}">All Users</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('crud') }}">Add Meta data</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('book_approval') }}">Book Approval</a>
+              </li>
+            {% endif %}
+            {% if 'admin' in current_user.get_user_roles() or 'creator' in current_user.get_user_roles() %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('your_books') }}">Books Management</a>
+              </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Books Issued</h2>
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Book</th>
+      <th>Borrow Date</th>
+      <th>Return Date</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for borrowing in borrowings %}
+    <tr>
+      <td>{{ borrowing.user.username }}</td>
+      <td>{{ borrowing.book.name }}</td>
+      <td>{{ borrowing.borrow_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td>{{ borrowing.return_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      <td>
+        <form action="{{ url_for('revoke_access', borrowing_id=borrowing.id) }}" method="get">
+          <button type="submit">Revoke Access</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

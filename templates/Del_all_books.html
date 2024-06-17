@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Your Songs</h1>
+            <ul>
+                {% for song in songs %}
+                <li>{{ song.name }}
+                    <button onclick="playSong({{ song.id }})">Play</button>
+                    <a href="/edit_song/{{ song.id }}"><button>Edit</button></a>
+                    <a href="/delete_song/{{ song.id }}"><button>Delete</button></a>
+                    <!-- <button onclick="deleteSong({{ song.id }})">Delete</button> -->
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3 p-5 bg-light">
+                <div id="title"> Title: {{title}}</div>
+                <div id="language"> Lanuage: {{language}}</div>
+                <div id="artist"> Artist: {{artist}}</div>
+                <div id="duration"> Duration: {{duration}}</div>
+                <div id="album_id"> Album: {{album_id}}</div>
+                <div id="genre"> Genre: {{genre}}</div>
+                <div id="averageRating"> Average Rating: {{ average_rating }}</div>
+                <audio controls id="audioPlayer"></audio>
+                <form id="rateForm" action="/rate_song/{{ song_id }}" method="POST">
+                    <label for="rating">Rating:</label>
+                    <select name="rating" id="rating">
+                        <option value="1" {% if existing_rating == 1 %} selected {% endif %}>1</option>
+                        <option value="2" {% if existing_rating == 2 %} selected {% endif %}>2</option>
+                        <option value="3" {% if existing_rating == 3 %} selected {% endif %}>3</option>
+                        <option value="4" {% if existing_rating == 4 %} selected {% endif %}>4</option>
+                        <option value="5" {% if existing_rating == 5 %} selected {% endif %}>5</option>
+                    </select>
+                    <button type="submit">Rate</button>
+                </form>
+                <div id="lyrics"> Lyrics: {{ lyrics }}</div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Create Album</h2>
+                    <form action="/create_album" method="POST">
+                        <label for="albumName">Album:</label>
+                        <input type="text" id="albumName" name="name" required>
+                        <button type="submit">Create Album</button>
+                    </form>
+                    <h2>Your Albums</h2>
+            <ul>
+                {% for album in albums %}
+                <li>{{ album.name }}
+                    <a href="/delete_creator_album/{{ album.id }}"><button>Delete</button></a>
+                </li>
+                {% endfor %}
+            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function playSong(songId) {
+    fetch('/play_song/' + songId)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to play song');
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = URL.createObjectURL(blob);
+            audioPlayer.play();
+            fetch('/get_song_metadata/' + songId)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch metadata');
+                    }
+                    return response.json();
+                })
+                .then(metadata => {
+                    const title = document.getElementById('title');
+                    const song_id = document.getElementById('rateForm');
+                    const lyrics = document.getElementById('lyrics');
+                    const language = document.getElementById('language');
+                    const artist = document.getElementById('artist');
+                    const album_id = document.getElementById('album_id');
+                    const genre = document.getElementById('genre');
+                    const duration = document.getElementById('duration');
+                    const averageRating = document.getElementById('averageRating');
+                    title.innerText = 'Title: ' + metadata.title;
+                    lyrics.innerText = 'Lyrics: ' + metadata.lyrics;
+                    language.innerText = 'Language: ' + metadata.language;
+                    artist.innerText = 'Artist: ' + metadata.artist;
+                    album_id.innerText = 'Album: ' + metadata.album_id;
+                    genre.innerText = 'Genre: ' + metadata.genre;
+                    duration.innerText = 'Duration: ' + metadata.duration;
+                    rateForm.action = "/rate_song/" + songId;
+                    averageRating.innerText = 'Average Rating: ' + metadata.average_rating;
+
+                    const rating = document.getElementById('rating');
+                    rating.value = metadata.existing_rating ? metadata.existing_rating : 1;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+</script>
+{% endblock %}

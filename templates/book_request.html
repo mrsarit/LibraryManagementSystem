@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Book Approval</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Book ID</th>
+                <th>Borrow Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for borrowing in unapproved_borrowings %}
+            <tr>
+                <td>{{ borrowing.user_id }}</td>
+                <td>{{ borrowing.book_id }}</td>
+                <td>{{ borrowing.borrow_date }}</td>
+                <td>
+                    <a href="{{ url_for('approve_borrowing', borrowing_id=borrowing.id) }}">Approve</a>
+                    <a href="{{ url_for('delete_borrowing', borrowing_id=borrowing.id) }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

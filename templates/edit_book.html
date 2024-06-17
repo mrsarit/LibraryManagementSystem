@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <h1>Edit Book</h1>
+    <form action="/edit_book/{{ book_id }}" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ song.name }}" required><br>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" required>{{ song.content }}</textarea><br>
+        <label for="album">Section:</label>
+        <select id="album" name="album" required>
+            {% for album in albums %}
+            <option value="{{ album.id }}" {% if album.id == song.section_id %}selected{% endif %}>{{ album.name }}</option>
+            {% endfor %}
+        </select><br>
+        <label for="author">Author:</label>
+        <select id="author" name="author" required>
+            {% for author in authors %}
+            <option value="{{ author.id }}" {% if author.id == song.artist_id %}selected{% endif %}>{{ author.name }}</option>
+            {% endfor %}
+        </select><br>
+        <label for="lang">Language:</label>
+        <select id="lang" name="lang" required>
+            {% for language in languages %}
+            <option value="{{ language.id }}" {% if language.id == song.lang_id %}selected{% endif %}>{{ language.name }}</option>
+            {% endfor %}
+        </select><br>
+        <button type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}

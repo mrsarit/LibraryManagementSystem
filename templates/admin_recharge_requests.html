@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Recharge Requests</h2>
+<table>
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in recharge_requests %}
+        <tr>
+            <td>{{ request.user.username }}</td>
+            <td>{{ request.amount }}</td>
+            <td>{{ request.status }}</td>
+            <td>
+                <a href="/admin/approve_recharge/{{ request.id }}">Approve</a>
+                <a href="/admin/reject_recharge/{{ request.id }}">Reject</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
